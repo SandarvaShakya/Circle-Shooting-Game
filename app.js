@@ -4,6 +4,8 @@ const context = canvas.getContext('2d')
 canvas.width = window.innerWidth 
 canvas.height = window.innerHeight
 
+const score = document.querySelector('#score')
+
 //Player's coordinates and radius
 let xCoordOfPlayer = canvas.width / 2
 let yCoordOfPlayer = canvas.height / 2
@@ -17,6 +19,7 @@ let enemies = []
 let particles = []
 
 let animationId
+let playerScore = 0 
 function animate(){
     animationId = requestAnimationFrame(animate)
     context.fillStyle = 'rgba(0, 0, 0, 0.1)'
@@ -61,7 +64,7 @@ function animate(){
             //Projectile and Enemy Touch
             if(distance - enemy.radius - projectile.radius < 1){
 
-                //create small explosion
+                //create explosion
                 for(let i = 0; i < enemy.radius * 2; i++){
                     particles.push(new Particle
                         (
@@ -78,6 +81,9 @@ function animate(){
                 }
 
                 if(enemy.radius - 10 > 5){
+                    //increase score
+                    playerScore += 100;
+                    score.innerHTML = playerScore
                     gsap.to(enemy, {
                         radius: enemy.radius - 10
                     })
@@ -85,6 +91,9 @@ function animate(){
                         projectiles.splice(projectileIndex, 1)
                     }, 0)
                 } else{
+                    //increase score
+                    playerScore += 250;
+                    score.innerHTML = playerScore
                     setTimeout(()=>{
                         enemies.splice(enemyIndex, 1)
                         projectiles.splice(projectileIndex, 1)

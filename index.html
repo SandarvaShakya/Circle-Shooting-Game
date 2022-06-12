@@ -11,9 +11,21 @@
             min-height: 100vh;
             margin: 0;
         }
+
+        .score{
+            position: fixed;
+            top: 10;
+            left: 10;
+            color:white;
+            user-select: none; 
+        }
     </style>
 </head>
 <body>
+    <div class="score">
+        <span>Score: </span>
+        <span id="score">0</span>
+    </div>
     <canvas></canvas>
     <script 
         src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js" 
