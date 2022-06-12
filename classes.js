@@ -110,3 +110,51 @@ class Enemy{
             this.draw()
         }
 }
+
+const friction = 0.99
+/**
+ * represents the smaller particels after enemy is hit
+ */
+class Particle{
+/**
+* @param {int} x = the x coordinate of the particles 
+* @param {int} y = the y coordinate of the particles
+* @param {int} radius = the radius of the particles
+* @param {string} color = color of the particles
+* @param {object} velocity = the x velocity and y velocity of the particles enemy explodes
+*/
+    constructor(x, y, radius, color, velocity){
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+        this.velocity = velocity
+        this.alpha = 1
+    }
+
+    /**
+     * draws the particles
+     */
+    draw(){
+        context.save()
+        context.globalAlpha = this.alpha
+        context.beginPath()
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        context.fillStyle = this.color
+        context.fill()
+        context.restore()
+    }
+
+    /**
+     * moves the particles by incrementing the 
+     * x and y coordinate with the x and y velocity
+     */
+    update(){
+        this.velocity.x *= friction
+        this.velocity.y *= friction
+        this.x += this.velocity.x
+        this.y += this.velocity.y
+        this.alpha -= 0.01
+        this.draw()
+    }
+}

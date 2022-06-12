@@ -14,6 +14,7 @@ const player = new Player(xCoordOfPlayer, yCoordOfPlayer, radiusOfPlayer, 'rgb(2
 
 let projectiles = []
 let enemies = []
+let particles = []
 
 let animationId
 function animate(){
@@ -21,6 +22,13 @@ function animate(){
     context.fillStyle = 'rgba(0, 0, 0, 0.1)'
     context.fillRect(0, 0, canvas.width, canvas.height)
     player.draw()
+
+    particles.forEach((particle, particleIndex) => {
+        if(particle.alpha <= 0){
+            particles.splice(particleIndex, 1)
+        }
+        particle.update()
+    })
 
     projectiles.forEach((projectile, projectileIndex) => {
         projectile.update()
@@ -49,11 +57,39 @@ function animate(){
 
         projectiles.forEach((projectile, projectileIndex) => {
             const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+
+            //Projectile and Enemy Touch
             if(distance - enemy.radius - projectile.radius < 1){
-                setTimeout(()=>{
-                    enemies.splice(enemyIndex, 1)
-                    projectiles.splice(projectileIndex, 1)
-                }, 0)
+
+                //create small explosion
+                for(let i = 0; i < enemy.radius * 2; i++){
+                    particles.push(new Particle
+                        (
+                            projectile.x, 
+                            projectile.y, 
+                            Math.random() * 2, 
+                            enemy.color, 
+                            {
+                                x: (Math.random() - 0.5) * (Math.random() * 8),
+                                y: (Math.random() - 0.5)  * (Math.random() * 8)
+                            }
+                        )
+                    )
+                }
+
+                if(enemy.radius - 10 > 5){
+                    gsap.to(enemy, {
+                        radius: enemy.radius - 10
+                    })
+                    setTimeout(()=>{
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+                } else{
+                    setTimeout(()=>{
+                        enemies.splice(enemyIndex, 1)
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+                }
             }
         })
     })
