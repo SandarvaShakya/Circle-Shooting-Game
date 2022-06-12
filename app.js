@@ -5,6 +5,9 @@ canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
 const score = document.querySelector('#score')
+const gameOver = document.querySelector('#game-over')
+const playAgain = document.querySelector('#start-game')
+const finalScore = document.querySelector('#final-score')
 
 //Player's coordinates and radius
 let xCoordOfPlayer = canvas.width / 2
@@ -12,11 +15,21 @@ let yCoordOfPlayer = canvas.height / 2
 const radiusOfPlayer = 30
 
 //make new player
-const player = new Player(xCoordOfPlayer, yCoordOfPlayer, radiusOfPlayer, 'rgb(255, 237, 237)')
+let player = new Player(xCoordOfPlayer, yCoordOfPlayer, radiusOfPlayer, 'rgb(255, 237, 237)')
 
 let projectiles = []
 let enemies = []
 let particles = []
+
+function init(){
+    player = new Player(xCoordOfPlayer, yCoordOfPlayer, radiusOfPlayer, 'rgb(255, 237, 237)')
+
+    projectiles = []
+    enemies = []
+    particles = []
+    playerScore = 0 
+    score.innerHTML = playerScore
+}
 
 let animationId
 let playerScore = 0 
@@ -56,6 +69,8 @@ function animate(){
         //Game Over
         if(distance - enemy.radius - player.radius < 1){
             cancelAnimationFrame(animationId)
+            finalScore.innerHTML = playerScore
+            gameOver.style.display = 'flex'
         }
 
         projectiles.forEach((projectile, projectileIndex) => {
@@ -119,5 +134,9 @@ addEventListener('click', event => {
     projectiles.push(projectile)
 })
 
-animate()
-spawnEnemies()
+playAgain.addEventListener('click', () => {
+    init()
+    animate()
+    spawnEnemies()
+    gameOver.style.display = 'none'
+})
