@@ -1,4 +1,4 @@
 ## Circle Shooting Game
 
-<img src="images/StartImage.png">
-<img src="images/playImage.png">
+<p><img src="images/StartImage.png"></p>
+<p><img src="images/playImage.png"></p>
